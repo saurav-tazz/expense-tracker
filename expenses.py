@@ -1,8 +1,11 @@
+import math
+
 def add_expense(expenses, amount, category, description = ""):
     """code to add expense"""
     if not isinstance(amount, (int, float)) or isinstance(amount, bool) :
         raise ValueError("Expected a number.\n")
-    
+    if not math.isfinite(amount):
+        raise ValueError("Amount must be a finite number.")
     paisa = round(amount * 100)
     if paisa <= 0:
         raise ValueError("Amount cannot be negative or zero")
@@ -47,100 +50,56 @@ def view_expenses(expenses):
         print("No expenses yet.")
         return
     for i, expense in enumerate(expenses, start = 1):
-        print(f"{i}. {format_rupees(expense["amount"])} | {expense["category"]} | {expense["description"]}")
+        print(f"{i}. {format_rupees(expense['amount'])} | {expense['category']} | {expense['description']}")
 
-
-
-expenses = []
-
-# try:
-#     add_expense(expenses, 1000, "Food", "Saturday Dinner")
-# except ValueError as e:
-#     print(e)
-
-# try:
-#     add_expense(expenses, 0.015, "misc")
-# except ValueError as e:
-#     print(e)
-
-# # bad amount
-# try:
-#     add_expense(expenses, 0, "Miscellanous", "Football boots")
-# except ValueError as e:
-#     print(e)
-
-# try:
-#     add_expense(expenses, -5, "Miscellanous", "Football boots")
-# except ValueError as e:
-#     print(e)
-
-# try:
-#     add_expense(expenses, "abc", "Miscellanous", "Football boots")
-# except ValueError as e:
-#     print(e)
-
-# try:
-#     add_expense(expenses, True, "Miscellanous", "Football boots")
-# except ValueError as e:
-#     print(e)
-
-# try:
-#     add_expense(expenses, 0.004, "Miscellanous", "Football boots")
-# except ValueError as e:
-#     print(e)
-
-# # bad category
-# try:
-#     add_expense(expenses, 1000, "    ", "Football boots")
-# except ValueError as e:
-#     print(e)
-
-# try:
-#     add_expense(expenses, 1000, 5, "Football boots")
-# except ValueError as e:
-#     print(e)
-
-# # bad description
-# try:
-#     add_expense(expenses, 1000, "Miscellanous", None)
-# except ValueError as e:
-#     print(e)
-
-#empty list
-# empty list
-empty = []
-view_expenses(empty)
-print(total_spent(empty))
-print(format_rupees(total_spent(empty)))
-
-# three expenses
-sample = [
-    {"amount": 1000, "category": "food", "description": "khana"},
-    {"amount": 1500, "category": "sports", "description": "futsal boots"},
-    {"amount": 1000, "category": "clothes", "description": "tshirt + pants"},
-]
-view_expenses(sample)
-print(total_spent(sample))
-print(format_rupees(total_spent(sample)))
-
-# bad input to format_rupees
-for bad in (True, "abc", 12.5, [1, 2]):
+def get_int(prompt, low, high):
     try:
-        format_rupees(bad)
-    except ValueError as e:
-        print(f"{bad!r}: {e}")
+        number = int(input(f"{prompt} ({low}-{high}): "))
+    except ValueError:
+        raise ValueError("Please enter a whole number.")
+    if not low <= number <= high:
+        raise ValueError(f"Select between {low} and {high}")
+    return number
 
-print(len(expenses))
+def main():
+    expenses = []
+    print("Expense Calculcator")
+    while True:
+        print("\nMenu\n1. Add expense\n2. View expense\n3. Total spent\n4. Total by category\n5. Quit")
+        try:
+            option = get_int("Enter Option", 1, 5)
+        except ValueError as e:
+            print(e)
+            continue
 
-for expense in expenses:
-    print(f'Rs.{expense["amount"]/100:.2f} : {expense["category"]} : {expense["description"]}')
-
-for category, paisa in total_by_category(expenses).items():
-    print(f"{category} : Rs.{paisa/100:.2f}")
-
-print("*"*20)
-try:
-    paisa = True
-    print(format_rupees(paisa))
-except ValueError as e:
-    print(e)
+        if option == 1:
+            try:
+                amount = float(input("Enter amount: "))
+            except ValueError:
+                print("Amount must be a number")
+                continue
+            category = input("Enter category: ")
+            description = input("Enter description (optional): ")
+            try:
+                add_expense(expenses, amount, category, description)
+                print("Expense added")
+            except ValueError as e:
+                print(e)
+        elif option == 2:
+            view_expenses(expenses)
+        elif option == 3:
+            print(format_rupees(total_spent(expenses)))
+        elif option == 4:
+            if not expenses:
+                print("No expenses yet")
+            else:
+                totals = total_by_category(expenses)
+                for category, amount in totals.items():
+                    print(f"{category} | {format_rupees(amount)}")
+        elif option == 5:
+            print("Thank You for using.")
+            return
+if __name__ == "__main__":
+    main()
+        
+        
