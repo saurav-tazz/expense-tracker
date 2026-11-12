@@ -32,87 +32,103 @@ def total_by_category(expenses):
     return totals
 
 def format_rupees(paisa):
-    if paisa == "":
-        raise ValueError("Paisa cannot be empty")
-    elif not isinstance(paisa, int) or isinstance(paisa, bool):
+    if not isinstance(paisa, int) or isinstance(paisa, bool):
         raise ValueError("Expected an integer.")
-    elif paisa <=0:
-        raise ValueError("Paisa cannot be negative or 0")
-
-    rupees = f"Rs.{paisa/100:.2f}"
-    return rupees
+    return f"Rs.{paisa/100:.2f}"
 
 def total_spent(expenses):
-    amount = 0
-    if not expenses:
-        return amount
+    total = 0
     for expense in expenses:
-        amount += expense["amount"]*100
-    return amount
+        total += expense["amount"]
+    return total
 
 def view_expenses(expenses):
     if not expenses:
         print("No expenses yet.")
-    else:
-        for i, expense in enumerate(expenses, start = 1):
-            print(f"{i}. Rs.{format_rupees(expense["amount"])} | {expense["category"]} | {expense["description"]}")
+        return
+    for i, expense in enumerate(expenses, start = 1):
+        print(f"{i}. {format_rupees(expense["amount"])} | {expense["category"]} | {expense["description"]}")
 
 
 
 expenses = []
 
-try:
-    add_expense(expenses, 1000, "Food", "Saturday Dinner")
-except ValueError as e:
-    print(e)
+# try:
+#     add_expense(expenses, 1000, "Food", "Saturday Dinner")
+# except ValueError as e:
+#     print(e)
 
-try:
-    add_expense(expenses, 0.015, "misc")
-except ValueError as e:
-    print(e)
+# try:
+#     add_expense(expenses, 0.015, "misc")
+# except ValueError as e:
+#     print(e)
 
-# bad amount
-try:
-    add_expense(expenses, 0, "Miscellanous", "Football boots")
-except ValueError as e:
-    print(e)
+# # bad amount
+# try:
+#     add_expense(expenses, 0, "Miscellanous", "Football boots")
+# except ValueError as e:
+#     print(e)
 
-try:
-    add_expense(expenses, -5, "Miscellanous", "Football boots")
-except ValueError as e:
-    print(e)
+# try:
+#     add_expense(expenses, -5, "Miscellanous", "Football boots")
+# except ValueError as e:
+#     print(e)
 
-try:
-    add_expense(expenses, "abc", "Miscellanous", "Football boots")
-except ValueError as e:
-    print(e)
+# try:
+#     add_expense(expenses, "abc", "Miscellanous", "Football boots")
+# except ValueError as e:
+#     print(e)
 
-try:
-    add_expense(expenses, True, "Miscellanous", "Football boots")
-except ValueError as e:
-    print(e)
+# try:
+#     add_expense(expenses, True, "Miscellanous", "Football boots")
+# except ValueError as e:
+#     print(e)
 
-try:
-    add_expense(expenses, 0.004, "Miscellanous", "Football boots")
-except ValueError as e:
-    print(e)
+# try:
+#     add_expense(expenses, 0.004, "Miscellanous", "Football boots")
+# except ValueError as e:
+#     print(e)
 
-# bad category
-try:
-    add_expense(expenses, 1000, "    ", "Football boots")
-except ValueError as e:
-    print(e)
+# # bad category
+# try:
+#     add_expense(expenses, 1000, "    ", "Football boots")
+# except ValueError as e:
+#     print(e)
 
-try:
-    add_expense(expenses, 1000, 5, "Football boots")
-except ValueError as e:
-    print(e)
+# try:
+#     add_expense(expenses, 1000, 5, "Football boots")
+# except ValueError as e:
+#     print(e)
 
-# bad description
-try:
-    add_expense(expenses, 1000, "Miscellanous", None)
-except ValueError as e:
-    print(e)
+# # bad description
+# try:
+#     add_expense(expenses, 1000, "Miscellanous", None)
+# except ValueError as e:
+#     print(e)
+
+#empty list
+# empty list
+empty = []
+view_expenses(empty)
+print(total_spent(empty))
+print(format_rupees(total_spent(empty)))
+
+# three expenses
+sample = [
+    {"amount": 1000, "category": "food", "description": "khana"},
+    {"amount": 1500, "category": "sports", "description": "futsal boots"},
+    {"amount": 1000, "category": "clothes", "description": "tshirt + pants"},
+]
+view_expenses(sample)
+print(total_spent(sample))
+print(format_rupees(total_spent(sample)))
+
+# bad input to format_rupees
+for bad in (True, "abc", 12.5, [1, 2]):
+    try:
+        format_rupees(bad)
+    except ValueError as e:
+        print(f"{bad!r}: {e}")
 
 print(len(expenses))
 
