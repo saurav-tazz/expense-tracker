@@ -1,4 +1,4 @@
-import Projects\expense_calculator\expenses.py
+from expenses import add_expense, total_by_category, format_rupees, total_spent, view_expenses
 
 
 expenses = [
@@ -61,8 +61,8 @@ try:
 except ValueError as e:
     print(e)
 
-empty list
-empty list
+# empty list
+# empty list
 empty = []
 view_expenses(empty)
 print(total_spent(empty))
