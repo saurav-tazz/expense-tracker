@@ -19,8 +19,8 @@ A command-line expense tracker written in Python. Add expenses, view them, see t
 ## Run it
 
 ```
-git clone https://github.com/saurav-tazz/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/saurav-tazz/expense_calculator.git
+cd expense_calculator
 python expenses.py
 ```
 
